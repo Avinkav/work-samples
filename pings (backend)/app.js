@@ -7,7 +7,7 @@ const timeStampDay = 86400; // No of seconds in a day = UNIX timestamp day
 
 // Mount middleware for logging
 app.use((req, res, next) => {
-    console.log( new Date().toLocaleString() + ' ' + req.method + ' ' + req.url + ' from '  + req.host);
+    console.log( new Date().toLocaleString() + ' ' + req.method + ' ' + req.url + ' from '  + req.hostname);
     next();
   });
 
@@ -54,6 +54,8 @@ app.get('/all/:date', (req, res) => {
     var to = from + timeStampDay;
 
     pings.findAllPings(from, to, (err, result) => { 
+        if (err) { return console.log(err) }
+
         res.json(transformJson(result));
     });
 });
@@ -64,6 +66,8 @@ app.get('/all/:from/:to', (req, res) => {
     var to = toTimeStamp(req.params.to)
 
     pings.findAllPings(from, to, (err, result) => { 
+        if (err) { return console.log(err) }
+
         res.json(transformJson(result));
     });   
 });
@@ -75,6 +79,8 @@ app.get('/:id/:date', (req, res) => {
     var to = from + timeStampDay;
 
     pings.findPings(req.params.id, from, to, (err, result) => { 
+        if (err) { return console.log(err) }
+
         // Flatten JSON to list at API level rather than data service level
         res.json(flattenJson(result));
     });  
@@ -85,7 +91,9 @@ app.get('/:id/:from/:to', (req, res) => {
     var from = toTimeStamp(req.params.from)
     var to = toTimeStamp(req.params.to)
 
-    pings.findPings(req.params.id, from, to, (err, result) => { 
+    pings.findPings(req.params.id, from, to, (err, result) => {
+        if (err) { return console.log(err) }
+        
         res.json(flattenJson(result));
     });
 });
