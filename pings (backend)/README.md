@@ -22,7 +22,7 @@ This together with the asynchronous nature of the express and mongoose libraries
 
 ## Why Mongo ?
 
-I've used MongoDb, a NoSQL document based storage engine for this solution. I felt this was suitable as there is no relational data in this data model. The model can be describe as "a device id having a list of pings", which is easily represented in a document based JSON/BSON format.
+I've used MongoDb, a NoSQL document based storage engine for this solution. I felt this was suitable as there is no relational data in this data model. The model can be described as "a device id having a list of pings", which is easily represented in a document based JSON/BSON format.
 
 The db engine has been setup to index the device id making queries a lot faster when looking for a specific device.
 
