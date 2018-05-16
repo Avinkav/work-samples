@@ -1,0 +1,16 @@
+{
+  "name": "pings-backend",
+  "version": "1.0.0",
+  "description": "api to log time clock pings",
+  "main": "app.js",
+  "private": true,
+  "scripts": {
+    "start": "node ."
+  },
+  "author": "Avin Kavish",
+  "license": "MIT",
+  "dependencies": {
+    "express": "4.16.3",
+    "mongoose": "5.1.0"
+  }
+}
