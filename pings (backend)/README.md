@@ -20,6 +20,8 @@ I can't say it better than node themselves say it.
 
 This together with the asynchronous nature of the express and mongoose libraries means making APIs is a breeze.
 
+Note: I've used console logging which is synchronous and bad for production but we are not there yet so... whatever.
+
 ## Why Mongo ?
 
 I've used MongoDb, a NoSQL document based storage engine for this solution. I felt this was suitable as there is no relational data in this data model. The model can be described as "a device id having a list of pings", which is easily represented in a document based JSON/BSON format.
