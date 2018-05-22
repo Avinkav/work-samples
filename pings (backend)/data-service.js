@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 // MongoDB hosted on Amazon EC2 Instance that I share with other test projects
-mongoose.connect('mongodb://apiWorker2:P6wxjBBg7mEmESNQ@13.54.76.183/pings');
+mongoose.connect('mongodb://apiWorker2:P6wxjBBg7mEmESNQ@avin.app/pings');
 var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'Connection Error'));
