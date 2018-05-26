@@ -5,22 +5,29 @@ const app = express()
 const timeStampDay = 86400; // No of seconds in a day = UNIX timestamp day
 
 
+
 // Mount middleware for logging
-app.use((req, res, next) => {
-    console.log( new Date().toLocaleString() + ' ' + req.method + ' ' + req.url + ' from '  + req.hostname);
-    next();
-  });
+// app.use((req, res, next) => {
+//     console.log( new Date().toLocaleString() + ' ' + req.method + ' ' + req.url + ' from '  + req.hostname);
+//     next();
+// });
 
 // Mount middleware for error handling
 app.use((req, res, next, err) => {
     console.error(err.stack);
     res.status(500).send('Well Done! You broke the api');
-  });
+});
+
+// Key for loader.io
+//loaderio-39958608d7931daaa2be769e4e76a803
+app.get('/loaderio-39958608d7931daaa2be769e4e76a803/', (req, res) => {
+    res.send('loaderio-39958608d7931daaa2be769e4e76a803');
+});
 
 // POST clear_data
 app.post('/clear_data', (req, res) => {
     pings.deleteMany({}, (err, result) => {
-        if (err) { return console.log('failed to wipe data') }
+        if (err) { return res.status(500).end(); /* return console.log('failed to wipe data') */ }
 
         res.status(200).send('You just wiped all data :o');
     })
@@ -32,7 +39,7 @@ app.post('/:id/:time', (req, res) => {
         { $push: { pings: req.params.time } }, 
         { upsert: true }, 
         (err, result) => {  
-            if (err) { return console.log(err) }
+            if (err) { return res.status(500).end(); /* return console.log(err) */ }
 
             res.status(200).send('Added Ping');
     });
@@ -41,7 +48,7 @@ app.post('/:id/:time', (req, res) => {
 // GET /devices
 app.get('/devices', (req, res) => {
     pings.find({}, '_id', (err, result) => {
-        if (err) { return console.log('Error Encounterd in getting devices!') }
+        if (err) { return res.status(500).end(); /* return console.log('Error Encounterd in getting devices!') */ }
         // Transform device JSON array to device id list
         var deviceList = result.map(d => d._id);
         res.json(deviceList);
@@ -54,7 +61,7 @@ app.get('/all/:date', (req, res) => {
     var to = from + timeStampDay;
 
     pings.findAllPings(from, to, (err, result) => { 
-        if (err) { return console.log(err) }
+        if (err) { console.log(err); return res.status(500).end();  }
 
         res.json(transformJson(result));
     });
@@ -66,7 +73,7 @@ app.get('/all/:from/:to', (req, res) => {
     var to = toTimeStamp(req.params.to)
 
     pings.findAllPings(from, to, (err, result) => { 
-        if (err) { return console.log(err) }
+        if (err) { return res.status(500).end(); /* return console.log(err) */ }
 
         res.json(transformJson(result));
     });   
@@ -79,7 +86,7 @@ app.get('/:id/:date', (req, res) => {
     var to = from + timeStampDay;
 
     pings.findPings(req.params.id, from, to, (err, result) => { 
-        if (err) { return console.log(err) }
+        if (err) { return res.status(500).end(); /* return console.log(err) */ }
 
         // Flatten JSON to list at API level rather than data service level
         res.json(flattenJson(result));
@@ -92,7 +99,7 @@ app.get('/:id/:from/:to', (req, res) => {
     var to = toTimeStamp(req.params.to)
 
     pings.findPings(req.params.id, from, to, (err, result) => {
-        if (err) { return console.log(err) }
+        if (err) { return res.status(500).end(); /* return console.log(err) */ }
         
         res.json(flattenJson(result));
     });

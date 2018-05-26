@@ -1,7 +1,12 @@
 var mongoose = require('mongoose');
 
 // MongoDB hosted on Amazon EC2 Instance that I share with other test projects
-mongoose.connect('mongodb://apiWorker2:P6wxjBBg7mEmESNQ@avin.app/pings');
+mongoose.connect('mongodb://apiWorker2:P6wxjBBg7mEmESNQ@13.54.208.3/pings');
+
+// mongoose.connect('mongodb://localhost/pings');
+
+// MongoFB Atlas Cluster Amazon EC2 US-EAST high af latency
+// mongoose.connect('mongodb+srv://api-worker:X40x7sy3zwjUCVZ7@tanda-ping-cluster-ttc1f.mongodb.net/test')
 var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'Connection Error'));
