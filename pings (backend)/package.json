@@ -1,6 +1,6 @@
 {
   "name": "pings-backend",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "api to log time clock pings",
   "main": "app.js",
   "private": true,
@@ -11,7 +11,11 @@
   "license": "MIT",
   "dependencies": {
     "express": "4.16.3",
+    "fs-extra": "^6.0.1",
+    "klaw": "^2.1.1",
     "mongoose": "5.1.0",
+    "rimraf": "^2.6.2",
+    "through2": "^2.0.3",
     "uuid": "^3.2.1"
   }
 }

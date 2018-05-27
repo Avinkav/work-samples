@@ -1,32 +1,37 @@
 const express = require('express')
-const pings = require('./data-service')
+
+// const pings = require('./mongo-service')
+
+// File based db
+const fileService = require('./file-service')
+var pings = new fileService('pings')
+
 
 const app = express()
 const timeStampDay = 86400; // No of seconds in a day = UNIX timestamp day
-
+const port = 3000;
 
 
 // Mount middleware for logging
-// app.use((req, res, next) => {
-//     console.log( new Date().toLocaleString() + ' ' + req.method + ' ' + req.url + ' from '  + req.hostname);
-//     next();
-// });
+app.use((req, res, next) => {
+    console.log( new Date().toLocaleString() + ' ' + req.method + ' ' + req.url + ' from '  + req.hostname);
+    next();
+});
 
 // Mount middleware for error handling
 app.use((req, res, next, err) => {
-    console.error(err.stack);
+    console.error(err);
     res.status(500).send('Well Done! You broke the api');
 });
 
-// Key for loader.io
-//loaderio-39958608d7931daaa2be769e4e76a803
+// Key for loader.io - load testing
 app.get('/loaderio-39958608d7931daaa2be769e4e76a803/', (req, res) => {
     res.send('loaderio-39958608d7931daaa2be769e4e76a803');
 });
 
 // POST clear_data
 app.post('/clear_data', (req, res) => {
-    pings.deleteMany({}, (err, result) => {
+    pings.deleteAll(err => {
         if (err) { return res.status(500).end(); /* return console.log('failed to wipe data') */ }
 
         res.status(200).send('You just wiped all data :o');
@@ -35,9 +40,7 @@ app.post('/clear_data', (req, res) => {
 
 // POST /:deviceID/:epochTime
 app.post('/:id/:time', (req, res) => {
-    pings.findByIdAndUpdate(req.params.id, 
-        { $push: { pings: req.params.time } }, 
-        { upsert: true }, 
+    pings.addPing(req.params.id, req.params.time, 
         (err, result) => {  
             if (err) { return res.status(500).end(); /* return console.log(err) */ }
 
@@ -47,11 +50,12 @@ app.post('/:id/:time', (req, res) => {
 
 // GET /devices
 app.get('/devices', (req, res) => {
-    pings.find({}, '_id', (err, result) => {
-        if (err) { return res.status(500).end(); /* return console.log('Error Encounterd in getting devices!') */ }
-        // Transform device JSON array to device id list
-        var deviceList = result.map(d => d._id);
-        res.json(deviceList);
+    pings.getAllDevices((err, result) => {
+        if (err) { 
+            console.log('Error Encounterd in getting devices!'); 
+            return res.status(500).end();   
+        }
+        return res.json(result);
     })
 });
 
@@ -110,8 +114,8 @@ app.use('',(req,res) =>{
     res.status(404).send('Error 404: The resource you are looking for was not found')
 });
 
-app.listen(3000);
-
+app.listen(port);
+console.log('Listening on port: ' + port);
 // Helper : Returns UNIX timestamp(s) from a number or ISO string, NOT js timestamp(ms)
 function toTimeStamp(value){
     var stamp = Number(value);

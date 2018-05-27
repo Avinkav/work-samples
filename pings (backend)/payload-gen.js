@@ -24,9 +24,9 @@ var variables = {};
 variables["keys"] = ["device_id", "timestamp"];
 variables["values"] = items;
 
-var output =  {};
-output["version"] = 1;
-output["variables"] = variables;
+// var output =  {};
+// output["version"] = 1;
+// output["variables"] = variables;
 
-fs.writeFileSync('payload.json', JSON.stringify(variables));
+fs.writeFileSync('payload-2.json', JSON.stringify(variables));
 
