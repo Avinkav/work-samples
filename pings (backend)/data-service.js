@@ -52,20 +52,6 @@ pingSchema.statics.findAllPings = function ( from, to, callback) {
      }).exec(callback);
 }
 
-
-pingSchema.statics.addPing = function (id, timestamp, callback) {
-    this.findByIdAndUpdate(id, 
-        { $push: { pings: timestamp } }, 
-        { upsert: true }).exec(callback); 
-}
-
-pingSchema.statics.findAllDevices = function (callback) {
-    this.find({}, '_id').exec(callback);
-            // Transform device JSON array to device id list
-            var deviceList = result.map(d => d._id);
-            res.json(deviceList);
-}
-
 var Pings = mongoose.model('Pings', pingSchema);
 
 module.exports = Pings;
